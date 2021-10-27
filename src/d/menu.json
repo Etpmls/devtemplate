@@ -1,0 +1,58 @@
+[
+  {
+    "alwaysShow": true,
+    "children": [
+      {
+        "component": "d/views/user/index",
+        "meta": {
+          "title": "用户"
+        },
+        "name": "User",
+        "path": "user"
+      },
+      {
+        "component": "d/views/role/index",
+        "meta": {
+          "title": "角色"
+        },
+        "name": "Role",
+        "path": "role"
+      },
+      {
+        "component": "d/views/permission/index",
+        "meta": {
+          "title": "权限"
+        },
+        "name": "Permission",
+        "path": "permission"
+      },
+      {
+        "component": "d/views/menu/index",
+        "meta": {
+          "title": "菜单"
+        },
+        "name": "Menu",
+        "path": "menu"
+      },
+      {
+        "component": "d/views/setting/index",
+        "meta": {
+          "title": "设置"
+        },
+        "name": "Setting",
+        "path": "setting"
+      }
+    ],
+    "component": "Layout",
+    "meta": {
+      "icon": "el-icon-s-tools",
+      "roles": [
+        "Administrator"
+      ],
+      "title": "管理"
+    },
+    "name": "Admin",
+    "path": "/admin",
+    "redirect": "/admin/user"
+  }
+]
