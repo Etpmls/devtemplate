@@ -49,3 +49,8 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+// https://www.cnblogs.com/qdlhj/p/11017656.html?ivk_sa=1024320u
+// 引入vue插件moment
+import moment from 'moment'
+Vue.prototype.$moment = moment
