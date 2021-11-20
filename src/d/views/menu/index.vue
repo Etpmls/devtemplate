@@ -47,7 +47,7 @@ export default {
     async handleSave() {
       const textData = this.$refs['JsonEditor'].getValue()
       const { message } = await MenuCreate({ menu: textData })
-      successMessage(this, this.lang('success'), message)
+      successMessage(this, '成功', message)
       this.MenuGet()
     },
     handleReset() {

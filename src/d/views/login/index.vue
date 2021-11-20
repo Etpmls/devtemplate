@@ -157,7 +157,7 @@ export default {
           this.loading = true
           var that = this
           window.grecaptcha.ready(function() {
-            window.grecaptcha.execute('6LdQGnwcAAAAADtpXLb-u_tFe2Q--qUCvmtrxXTI', { action: 'submit' }).then(function(token) {
+            window.grecaptcha.execute('6LdE90oaAAAAAFIuMhvTLahgcXYqZJSfm9QwMdwX', { action: 'submit' }).then(function(token) {
               // Add your logic to submit to your backend server here.
               that.loginForm.response = token
               that.$store.dispatch('user/login', that.loginForm)
