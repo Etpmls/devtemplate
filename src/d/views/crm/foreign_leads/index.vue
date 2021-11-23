@@ -54,21 +54,107 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="地址">
-              <span>{{ props.row.address }}</span>
-            </el-form-item>
-            <el-form-item label="行业">
-              <span>{{ props.row.industry }}</span>
-            </el-form-item>
-            <el-form-item label="移动电话">
-              <span>{{ props.row.mobile }}</span>
-            </el-form-item>
-            <el-form-item label="固定电话">
-              <span>{{ props.row.telephone }}</span>
-            </el-form-item>
-            <el-form-item label="备注">
-              <span>{{ props.row.remark }}</span>
-            </el-form-item>
+            <el-row :gutter="24">
+              <el-col :span="20" :offset="2">
+                <el-descriptions class="margin-top" :column="2" border>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-user" />
+                      名称
+                    </template>
+                    {{ props.row.name }}
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-s-comment" />
+                      来源
+                    </template>
+                    {{ props.row.source }}
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-s-flag" />
+                      行业
+                    </template>
+                    {{ props.row.industry }}
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-location-information" />
+                      国家
+                    </template>
+                    <div v-if="props.row.country.name === ''">
+                      未知
+                    </div>
+                    <div v-else>
+                      {{ props.row.country.name }}
+                    </div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-receiving" />
+                      Email
+                    </template>
+                    {{ props.row.email }}
+                  </el-descriptions-item>
+
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-mobile-phone" />
+                      移动电话
+                    </template>
+                    {{ props.row.mobile }}
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-phone" />
+                      固定电话
+                    </template>
+                    {{ props.row.telephone }}
+                  </el-descriptions-item>
+
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-office-building" />
+                      下次联系时间
+                    </template>
+                    <div v-if="props.row.next_time !== '0001-01-01T00:00:00Z'">
+                      {{ $moment(props.row.next_time).format('YYYY-MM-DD') }}
+                    </div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-star-off" />
+                      评分
+                    </template>
+                    <template>
+                      <el-rate
+                        v-model="props.row.level"
+                        disabled
+                        show-score
+                        text-color="#ff9900"
+                        score-template="{value}"
+                      />
+                    </template>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-office-building" />
+                      地址
+                    </template>
+                    {{ props.row.address }}
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-tickets" />
+                      备注
+                    </template>
+                    {{ props.row.remark }}
+                  </el-descriptions-item>
+                </el-descriptions>
+              </el-col>
+            </el-row>
+
           </el-form>
         </template>
       </el-table-column>
