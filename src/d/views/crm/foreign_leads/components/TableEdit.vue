@@ -13,7 +13,7 @@
           <el-input v-model="formData.name" placeholder="请输入名称" clearable :style="{width: '100%'}" />
         </el-form-item>
         <el-form-item label="国家" prop="country_id">
-          <el-select v-model="formData.country_id" placeholder="请选择国家" clearable :style="{width: '100%'}">
+          <el-select v-model="formData.country_id" filterable placeholder="请选择国家" clearable :style="{width: '100%'}">
             <el-option
               v-for="(item, index) in country_idOptions"
               :key="index"
@@ -118,7 +118,7 @@ export default {
       isEdit: false,
       formData: {
         name: undefined,
-        country_id: undefined,
+        country_id: 0,
         source: '未知',
         mobile: undefined,
         telephone: undefined,
@@ -174,9 +174,11 @@ export default {
   computed: {},
   watch: {},
   created() {
+    // 获取全部国家
     CountryGet().then((result) => {
       const { data } = result
       this.country_idOptions = data
+      this.country_idOptions.unshift({ id: 0, name: '未知', area: '未知' })
     })
   },
   mounted() {},
@@ -209,6 +211,10 @@ export default {
         this.title = '修改线索'
         this.isEdit = true
         this.formData = Object.assign({}, row)
+        // [防止控制台报错]如果时间为go的默认空值，则next_time字段为空
+        if (this.formData.next_time === '0001-01-01T00:00:00Z') {
+          this.formData.next_time = null
+        }
       }
     },
     handelConfirm() {

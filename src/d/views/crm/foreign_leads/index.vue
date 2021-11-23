@@ -93,6 +93,7 @@
         show-overflow-tooltip
         label="Email"
         prop="email"
+        min-width="200"
       />
       <el-table-column
         show-overflow-tooltip
