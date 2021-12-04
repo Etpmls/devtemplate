@@ -39,3 +39,43 @@ export function ForeignLeadsDelete(data) {
     data
   })
 }
+
+export function LeadsConvertToCustomer(data) {
+  return request({
+    url: '/api/v1/crm/foreignLeads/convertToCustomer',
+    method: 'post',
+    data
+  })
+}
+
+export function CustomerCreate(data) {
+  return request({
+    url: '/api/v1/crm/customer/create',
+    method: 'post',
+    data
+  })
+}
+
+export function CustomerGet(param) {
+  return request({
+    url: '/api/v1/crm/customer/get',
+    method: 'get',
+    params: param
+  })
+}
+
+export function CustomerEdit(data) {
+  return request({
+    url: '/api/v1/crm/customer/edit',
+    method: 'put',
+    data
+  })
+}
+
+export function CustomerDelete(data) {
+  return request({
+    url: '/api/v1/crm/customer/delete',
+    method: 'delete',
+    data
+  })
+}

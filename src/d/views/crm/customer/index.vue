@@ -56,8 +56,7 @@
           <el-form label-position="left" inline class="demo-table-expand">
             <el-row :gutter="24">
               <el-col :span="20" :offset="2">
-                <el-divider content-position="left">操作面板</el-divider>
-                <el-button type="success" size="mini" plain @click="LeadsConvertToCustomer(props.row.id)">转化为客户</el-button>
+                <!--<el-divider content-position="left">操作面板</el-divider>-->
 
                 <el-divider content-position="left">详细信息</el-divider>
                 <el-descriptions class="margin-top" :column="2" border>
@@ -243,10 +242,9 @@
 </template>
 
 <script>
-import { ForeignLeadsDelete, LeadsConvertToCustomer } from '@/d/api/crm'
+import { CustomerDelete, CustomerGet } from '@/d/api/crm'
 import TableEdit from './components/TableEdit'
-import { successMessage, errorTextMessage, deleteConfirmMessage, confirmMessage } from '@/d/utils/utils'
-import { ForeignLeadsGet } from '@/d/api/crm'
+import { successMessage, errorTextMessage, deleteConfirmMessage } from '@/d/utils/utils'
 export default {
   name: 'ComprehensiveTable',
   components: {
@@ -298,7 +296,7 @@ export default {
     handleDelete(row) {
       if (row.id) {
         deleteConfirmMessage(this, '是否删除当前项', async() => {
-          const { message } = await ForeignLeadsDelete({ leads: [{ id: row.id }] })
+          const { message } = await CustomerDelete({ customer: [{ id: row.id }] })
           successMessage(this, '成功', message)
           this.fetchData()
         })
@@ -306,7 +304,7 @@ export default {
         if (this.selectRows.length > 0) {
           const ids = this.selectRows.map((item) => item)
           deleteConfirmMessage(this, '是否删除选中项', async() => {
-            const { message } = await ForeignLeadsDelete({ leads: ids })
+            const { message } = await CustomerDelete({ customer: ids })
             successMessage(this, '成功', message)
             this.fetchData()
           })
@@ -330,24 +328,13 @@ export default {
     },
     async fetchData() {
       this.listLoading = true
-      const result = await ForeignLeadsGet(this.queryForm)
+      const result = await CustomerGet(this.queryForm)
       const { data, count } = result
       this.list = data
       this.total = count
       setTimeout(() => {
         this.listLoading = false
       }, 500)
-    },
-    LeadsConvertToCustomer(id) {
-      confirmMessage(this, '是否把当前线索转化为客户', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }, async() => {
-        const { message } = await LeadsConvertToCustomer({ leads: { id: id }})
-        successMessage(this, '成功', message)
-        this.fetchData()
-      })
     }
   }
 }
