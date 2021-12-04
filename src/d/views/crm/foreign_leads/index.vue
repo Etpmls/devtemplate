@@ -167,6 +167,7 @@
         show-overflow-tooltip
         label="名称"
         prop="name"
+        min-width="200"
       />
       <el-table-column
         show-overflow-tooltip
