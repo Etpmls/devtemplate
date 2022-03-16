@@ -57,8 +57,7 @@
             <el-row :gutter="24">
               <el-col :span="20" :offset="2">
                 <!--<el-divider content-position="left">操作面板</el-divider>-->
-                <el-divider content-position="left">控制面板</el-divider>
-                <el-button type="primary" size="mini" @click="showTimeline(props.row)">时间线</el-button>
+
                 <el-divider content-position="left">详细信息</el-divider>
                 <el-descriptions class="margin-top" :column="2" border>
                   <el-descriptions-item>
@@ -77,22 +76,10 @@
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template slot="label">
-                      <i class="el-icon-s-flag" />
-                      行业
+                      <i class="el-icon-s-tools" />
+                      主营产品
                     </template>
-                    {{ props.row.industry }}
-                  </el-descriptions-item>
-                  <el-descriptions-item>
-                    <template slot="label">
-                      <i class="el-icon-location-information" />
-                      国家
-                    </template>
-                    <div v-if="props.row.country.name === ''">
-                      未知
-                    </div>
-                    <div v-else>
-                      {{ props.row.country.name }}
-                    </div>
+                    <el-tag v-for="(item, key) in handleTag(props.row.main_products)" :key="key" size="small">{{ item }}</el-tag>
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template slot="label">
@@ -119,15 +106,6 @@
 
                   <el-descriptions-item>
                     <template slot="label">
-                      <i class="el-icon-office-building" />
-                      下次联系时间
-                    </template>
-                    <div v-if="props.row.next_time !== '0001-01-01T00:00:00Z'">
-                      {{ $moment(props.row.next_time).format('YYYY-MM-DD') }}
-                    </div>
-                  </el-descriptions-item>
-                  <el-descriptions-item>
-                    <template slot="label">
                       <i class="el-icon-star-off" />
                       评分
                     </template>
@@ -141,14 +119,23 @@
                       />
                     </template>
                   </el-descriptions-item>
+
                   <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-s-shop" />
+                      网址
+                    </template>
+                    {{ props.row.website }}
+                  </el-descriptions-item>
+
+                  <el-descriptions-item :span="2">
                     <template slot="label">
                       <i class="el-icon-office-building" />
                       地址
                     </template>
                     {{ props.row.address }}
                   </el-descriptions-item>
-                  <el-descriptions-item>
+                  <el-descriptions-item :span="2">
                     <template slot="label">
                       <i class="el-icon-tickets" />
                       备注
@@ -167,8 +154,18 @@
         show-overflow-tooltip
         label="名称"
         prop="name"
-        min-width="200"
+        min-width="100"
+        sortable
       />
+      <el-table-column
+        show-overflow-tooltip
+        label="主营产品"
+        prop="main_products"
+      >
+        <template slot-scope="scope">
+          <el-tag v-for="(item, key) in handleTag(scope.row.main_products)" :key="key" size="small">{{ item }}</el-tag>
+        </template>
+      </el-table-column>>
       <el-table-column
         show-overflow-tooltip
         label="来源"
@@ -177,15 +174,8 @@
       />
       <el-table-column
         show-overflow-tooltip
-        label="国家"
-        prop="country.name"
-        sortable
-      />
-      <el-table-column
-        show-overflow-tooltip
-        label="Email"
-        prop="email"
-        min-width="200"
+        label="手机"
+        prop="mobile"
       />
       <el-table-column
         show-overflow-tooltip
@@ -201,16 +191,6 @@
             text-color="#ff9900"
             score-template="{value}"
           />
-        </template>
-      </el-table-column>
-      <el-table-column
-        show-overflow-tooltip
-        label="下次联系时间"
-        prop="next_time"
-        sortable
-      >
-        <template slot-scope="scope">
-          <span v-if="scope.row.next_time !== '0001-01-01T00:00:00Z'">{{ $moment(scope.row.next_time).format('YYYY-MM-DD') }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -240,19 +220,16 @@
       :visible.sync="isShow"
       @refreshTable="fetchData"
     />
-    <timeline ref="timeline" :visible.sync="dialogVisibleTimeline" />
   </div>
 </template>
 
 <script>
-import { CustomerDelete, CustomerGet } from '@/d/api/crm'
+import { SupplierDelete, SupplierGet } from '@/d/api/crm'
 import TableEdit from './components/TableEdit'
-import Timeline from './components/timeline'
 import { successMessage, errorTextMessage, deleteConfirmMessage } from '@/d/utils/utils'
 export default {
   name: 'ComprehensiveTable',
   components: {
-    Timeline,
     TableEdit
   },
   filters: {
@@ -278,8 +255,7 @@ export default {
         size: 100,
         search: ''
       },
-      isShow: false, // 添加编辑的框是否显示
-      dialogVisibleTimeline: false
+      isShow: false // 添加编辑的框是否显示
     }
   },
   created() {
@@ -302,7 +278,7 @@ export default {
     handleDelete(row) {
       if (row.id) {
         deleteConfirmMessage(this, '是否删除当前项', async() => {
-          const { message } = await CustomerDelete({ customer: [{ id: row.id }] })
+          const { message } = await SupplierDelete({ supplier: [{ id: row.id }] })
           successMessage(this, '成功', message)
           this.fetchData()
         })
@@ -310,7 +286,7 @@ export default {
         if (this.selectRows.length > 0) {
           const ids = this.selectRows.map((item) => item)
           deleteConfirmMessage(this, '是否删除选中项', async() => {
-            const { message } = await CustomerDelete({ customer: ids })
+            const { message } = await SupplierDelete({ supplier: ids })
             successMessage(this, '成功', message)
             this.fetchData()
           })
@@ -334,7 +310,7 @@ export default {
     },
     async fetchData() {
       this.listLoading = true
-      const result = await CustomerGet(this.queryForm)
+      const result = await SupplierGet(this.queryForm)
       const { data, count } = result
       this.list = data
       this.total = count
@@ -342,12 +318,14 @@ export default {
         this.listLoading = false
       }, 500)
     },
-    // 时间线
-    showTimeline(row) {
-      this.$refs['timeline'].CustomerActivityGet(row.id)
-      this.$refs['timeline'].SetCustomerInfo(row)
-      this.dialogVisibleTimeline = true
+    /* 处理主要产品json为标签 */
+    handleTag(str) {
+      if (str === '') {
+        return []
+      }
+      return JSON.parse(str)
     }
+    /* 处理主要产品json为标签 */
   }
 }
 </script>

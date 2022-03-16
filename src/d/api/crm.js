@@ -79,3 +79,67 @@ export function CustomerDelete(data) {
     data
   })
 }
+
+export function SupplierCreate(data) {
+  return request({
+    url: '/api/v1/crm/supplier/create',
+    method: 'post',
+    data
+  })
+}
+
+export function SupplierGet(param) {
+  return request({
+    url: '/api/v1/crm/supplier/get',
+    method: 'get',
+    params: param
+  })
+}
+
+export function SupplierEdit(data) {
+  return request({
+    url: '/api/v1/crm/supplier/edit',
+    method: 'put',
+    data
+  })
+}
+
+export function SupplierDelete(data) {
+  return request({
+    url: '/api/v1/crm/supplier/delete',
+    method: 'delete',
+    data
+  })
+}
+
+export function CustomerActivityCreate(data) {
+  return request({
+    url: '/api/v1/crm/customer/activityCreate',
+    method: 'post',
+    data
+  })
+}
+
+export function CustomerActivityGet(param) {
+  return request({
+    url: '/api/v1/crm/customer/activityGet',
+    method: 'get',
+    params: param
+  })
+}
+
+export function CustomerActivityEdit(data) {
+  return request({
+    url: '/api/v1/crm/customer/activityEdit',
+    method: 'put',
+    data
+  })
+}
+
+export function CustomerActivityDelete(data) {
+  return request({
+    url: '/api/v1/crm/customer/activityDelete',
+    method: 'delete',
+    data
+  })
+}
